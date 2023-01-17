@@ -43,21 +43,16 @@ async function scrapeData() {
       if (idx <= 9) {
         const link = htmlContent(el).attr('src');
         memesArray.push(link);
-      }
-      console.log(memesArray); // Looping over the memesArray.length and slicing out 10
-      for (let i = 0; i < memesArray.length; i++) {
-        client.get(memesArray[i], (res) => {
-          if (i < 9) {
-            const dir = `./memes/0${i + 1}.jpg`;
-            res.pipe(fs.createWriteStream(dir));
-          } else {
-            const dir = `./memes/${i + 1}.jpg`;
-            res.pipe(fs.createWriteStream(dir));
-          }
+        client.get(link, (res) => {
+          const dir = fs.createWriteStream(`./memes/0${idx + 1}.jpg`);
+          res.pipe(dir);
+          dir.on('finish', () => {
+            dir.close();
+            console.log('Download finished');
+          });
         });
       }
     });
-    console.log('Download finished');
   } catch (err) {
     console.error(err);
   }
