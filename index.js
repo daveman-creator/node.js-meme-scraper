@@ -57,5 +57,5 @@ async function scrapeData() {
     console.error(err);
   }
 }
-// call the function
+// call the function declared above
 await scrapeData();
